@@ -1,7 +1,16 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Movie, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+ 
+  describe 'associations' do
+    it { is_expected.to have_many :ratings }
+  end
 
-  it { is_expected.to have_many :ratings }
+  describe 'validations' do
+    %i[title release_date].each do |param|
+      it { is_expected.to validate_presence_of param }
+    end
+  end
 end
