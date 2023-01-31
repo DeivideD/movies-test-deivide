@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Movies
   class API < Grape::API
     version 'v1', using: :path
-    prefix "api"
+    prefix 'api'
     format :json
 
     resource :movies do
@@ -10,7 +12,7 @@ module Movies
         movies = Movie.all
 
         movies.each do |movie|
-          if movie.ratings.count == 0
+          if movie.ratings.count.zero?
             movie.rating = 0
           else
             movie.rating = movie.ratings.map(&:grade).sum / movie.ratings.map(&:grade).count
@@ -29,7 +31,7 @@ module Movies
         if movies.any?
           movies.first
         else
-          error! "nothing for this search", :internal_server_error
+          error! 'nothing for this search', :internal_server_error
         end
       end
 
@@ -42,14 +44,14 @@ module Movies
         movie = Movie.find_by_id(params[:id])
 
         if movie
-          if movie.ratings.count == 0
+          if movie.ratings.count.zero?
             movie.rating = 0
           else
             movie.rating = movie.ratings.map(&:grade).sum / movie.ratings.map(&:grade).count
           end
           movie
         else
-          error! "not found", :internal_server_error
+          error! 'not found', :internal_server_error
         end
       end
 

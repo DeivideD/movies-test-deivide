@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Ratings
   class API < Grape::API
     version 'v1', using: :path
-    prefix "api"
+    prefix 'api'
     format :json
 
     resource :ratings do
