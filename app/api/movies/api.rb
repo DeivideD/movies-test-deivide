@@ -2,6 +2,8 @@
 
 module Movies
   class API < Grape::API
+    include Grape::Kaminari
+   
     version 'v1', using: :path
     prefix 'api'
     format :json
@@ -10,14 +12,6 @@ module Movies
       desc 'returns all movies'
       get do
         movies = Movie.all
-
-        movies.each do |movie|
-          if movie.ratings.count.zero?
-            movie.rating = 0
-          else
-            movie.rating = movie.ratings.map(&:grade).sum / movie.ratings.map(&:grade).count
-          end
-        end
       end
 
       desc 'searches a movie using title'
@@ -44,11 +38,6 @@ module Movies
         movie = Movie.find_by_id(params[:id])
 
         if movie
-          if movie.ratings.count.zero?
-            movie.rating = 0
-          else
-            movie.rating = movie.ratings.map(&:grade).sum / movie.ratings.map(&:grade).count
-          end
           movie
         else
           error! 'not found', :internal_server_error
