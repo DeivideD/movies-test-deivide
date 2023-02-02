@@ -4,8 +4,8 @@ namespace :dev do
     if Rails.env.development?
       show_spinner("Droping BD...") { %x(rails db:drop) }
       show_spinner("Creating BD...") { %x(rails db:create) }
-      show_spinner("Migrate BD...") { %x(rails db:migrate) }
-      show_spinner("Exec Seeds...") { %x(rails db:seed) }
+      show_spinner("Running migrates BD...") { %x(rails db:migrate) }
+      show_spinner("Executing seeds...") { %x(rails db:seed) }
     else
       puts "Você não está em ambiente de desenvolvimento!"
     end
