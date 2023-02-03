@@ -2,8 +2,7 @@
 
 module Movies
   class API < Grape::API
-    include Grape::Kaminari
-   
+  
     version 'v1', using: :path
     prefix 'api'
     format :json
@@ -11,7 +10,7 @@ module Movies
     resource :movies do
       desc 'returns all movies'
       get do
-        movies = Movie.all
+        Movie.all.page(params[:page]).per(params[:per])
       end
 
       desc 'searches a movie using title'
