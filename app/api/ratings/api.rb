@@ -7,6 +7,13 @@ module Ratings
     format :json
 
     resource :ratings do
+
+      desc 'average grade the last two mother'
+      get '/average-rate' do
+       average_rate = Rating.average_rate_last_two_months
+       { 'average_rate_last_two_mother': average_rate }
+      end
+
       desc 'add ratings to a movie'
       params do
         requires :movie_id, type: String, desc: 'Movie id.'

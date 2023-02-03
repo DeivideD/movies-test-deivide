@@ -20,11 +20,22 @@ RSpec.describe Rating, type: :model do
   end
 
   context 'calculate rate' do
+
+    describe '.average_rate_last_two_months' do
+      let!(:movie) { create(:movie) }
+      let!(:movie2) { create(:movie) }
+      let!(:rating) { create(:rating, movie: movie, grade: 5) }
+      let!(:rating2) { create(:rating, movie: movie, grade: 3) }
+
+      it { expect(described_class.average_rate_last_two_months).to eq(4) }
+    end
+
     describe '.calculate_rating' do
       let!(:movie) { create(:movie) }
-      let!(:date) { create(:rating, movie: movie, grade: 5) }
+      let!(:rating) { create(:rating, movie: movie, grade: 5) }
 
       it { expect(movie.rating).to eq(5) }
     end
   end
+
 end
