@@ -5,12 +5,10 @@ class Movie < ApplicationRecord
 
   scope :by_release_date, -> { 
     group("DATE_PART('year', release_date)").count 
-    # .max_by{|k,v| v}
   }
   
   scope :by_year, -> (data) { 
     where("DATE_PART('year', release_date) = ? ", data) 
-    
   }
 
 end

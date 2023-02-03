@@ -13,6 +13,19 @@ module Movies
         Movie.all.page(params[:page]).per(params[:per])
       end
 
+      desc 'Show the year that had more films'
+      get '/year-more-release' do
+        year_movies = Movie.by_release_date.max_by{|k,v| v}
+
+        { year: year_movies[0].to_i, movies:year_movies[1] }
+      end
+
+
+      desc 'Show the movies by year'
+      get '/by-year/:year' do
+        Movie.by_year(params[:year]).page(params[:page]).per(params[:per])
+      end
+
       desc 'searches a movie using title'
       params do
         optional :title, type: String, desc: 'search term'
