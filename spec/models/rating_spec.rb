@@ -18,4 +18,13 @@ RSpec.describe Rating, type: :model do
       expect(rating.valid?).to eq false
     end
   end
+
+  context 'calculate rate' do
+    describe '.calculate_rating' do
+      let!(:movie) { create(:movie) }
+      let!(:date) { create(:rating, movie: movie, grade: 5) }
+
+      it { expect(movie.rating).to eq(5) }
+    end
+  end
 end

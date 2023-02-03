@@ -28,13 +28,4 @@ RSpec.describe Movie, type: :model do
       it { expect(described_class.by_year(2022)).to match_array([movie_1]) }
     end
   end
-
-  context 'calculate rate' do
-    describe '.calculate_rating' do
-      let!(:movie) { create(:movie) }
-      let!(:date) { create(:rating, movie: movie, grade: 5) }
-
-      it { expect(described_class.last.rating).to eq(5) }
-    end
-  end
 end
