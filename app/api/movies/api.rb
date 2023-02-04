@@ -26,6 +26,20 @@ module Movies
         Movie.by_year(params[:year]).page(params[:page]).per(params[:per])
       end
 
+      desc 'Show highest rating movie by parental rating'
+      get '/best-rating-by-parental-rating/:parental_rating' do
+        Movie.where(parental_rating: params[:parental_rating])
+        .where.not(rating: nil)
+        .order(:rating, :created_at).last
+      end
+
+      desc 'Show highest rating movie by genre'
+      get '/best-rating-by-genre/:genre' do
+        Movie.where("genre ILIKE '%#{params[:genre]}%'")
+        .where.not(rating: nil)
+        .order(:rating, :created_at).last
+      end
+
       desc 'searches a movie using title'
       params do
         optional :title, type: String, desc: 'search term'

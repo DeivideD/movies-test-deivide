@@ -1,22 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe Movies::API do
-  let!(:movie) { Movie.create(title: "teste", release_date: Date.today) }
-  let!(:movie2) { Movie.create(title: "teste2", release_date: Date.tomorrow) }
-  let!(:movie3) { Movie.create(title: "teste3", release_date: 1.year.ago) }
+  let(:parental_rating) { "D" }
+  let(:genre) { "fantasy" }
+  let!(:movie) { create(:movie, title: "teste1", release_date: Date.today, parental_rating: parental_rating) }
+  let!(:movie2) { create(:movie, title: "teste2", release_date: Date.tomorrow, genre: genre) }
+  let!(:movie3) { create(:movie, title: "teste3", release_date: 1.year.ago) }
 
   describe 'GET /api/v1/movies' do
     it 'returns all movies' do
       get "/api/v1/movies/"
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("teste")
+      expect(response.body).to include("teste1")
       expect(response.body).to include("teste2")
       expect(response.body).to include("teste3")
     end
   end
 
 
-  describe 'GET api/v1/movies/year-more-release' do
+  describe 'GET /api/v1/movies/year-more-release' do
     it 'returns year with more releases' do
       get "/api/v1/movies/year-more-release"
       expect(response).to have_http_status(:ok)
@@ -24,13 +26,31 @@ RSpec.describe Movies::API do
     end
   end
 
-  describe 'GET  /api/v1/movies/by-year/:year' do
+  describe 'GET /api/v1/movies/by-year/:year' do
     it 'returns movies by year' do
       get "/api/v1/movies/by-year/#{Date.today.year}"
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("teste")
+      expect(response.body).to include("teste1")
       expect(response.body).to include("teste2")
       expect(response.body).not_to include("teste3")
+    end
+  end
+
+  describe 'GET /best-rating-by-parental-rating/:parental_rating' do
+    let!(:rating) { create(:rating, movie: movie, grade: 5) }
+    it 'returns max rating movie by parental rating' do
+      get "/api/v1/movies/best-rating-by-parental-rating/#{parental_rating}"
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("teste1")
+    end
+  end
+
+  describe 'GET /best-rating-by-genre/:genre' do
+    let!(:rating) { create(:rating, movie: movie2, grade: 5) }
+    it 'returns max rating movie by genre' do
+      get "/api/v1/movies/best-rating-by-genre/#{genre}"
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("teste2")
     end
   end
 
