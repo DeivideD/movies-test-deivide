@@ -36,6 +36,30 @@ RSpec.describe Movies::API do
     end
   end
 
+  describe 'GET /api/v1/movies/by-genre/:genre' do
+    it 'returns movies by genre' do
+      get "/api/v1/movies/by-genre/#{genre}"
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("teste2")
+    end
+  end
+
+  describe 'GET /api/v1/movies/by-parental_rating/:parental_rating' do
+    it 'returns movies by parental rating' do
+      get "/api/v1/movies/by-parental_rating/#{parental_rating}"
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("teste1")
+    end
+  end
+
+  describe 'GET /api/v1/movies/count-by-year' do
+    it 'returns movies by genre' do
+      get "/api/v1/movies/count-by-year"
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(Date.today.year.to_s)
+    end
+  end
+
   describe 'GET /best-rating-by-parental-rating/:parental_rating' do
     let!(:rating) { create(:rating, movie: movie, grade: 5) }
     it 'returns max rating movie by parental rating' do

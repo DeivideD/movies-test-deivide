@@ -38,16 +38,16 @@ Movie.create(
   movie = Movie.create(
     title: Faker::Movie.title,
     release_date: Faker::Date.between(from: '2015-01-01', to: '2023-12-30'),
-    runtime: "#{Faker::Number.between(from: 60, to: 150)} min",
+    runtime: "#{rand(60..150)} min",
     genre: %w[Action Science Fiction Fantasy Adventure Drama Sci-Fi].sample(3).join(', '),
     parental_rating: %w[N/A G PG PG-13 R NC-17].sample,
     plot: Faker::Lorem.paragraph
   )
 
-  5.times do
+  rand(1..10).times do
     Rating.create(
       movie: movie,
-      grade: [0, 1, 2, 3, 4, 5].sample
+      grade: rand(0..5)
     )
   end
 end

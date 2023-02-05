@@ -2,42 +2,94 @@
 
 module Movies
   class API < Grape::API
-  
     version 'v1', using: :path
     prefix 'api'
     format :json
 
+    helpers do
+      params :pagination do
+        optional :page, type: Integer, desc: 'page request.'
+        optional :per, type: Integer, desc: 'quantity per page.'
+      end
+
+      def show_colection(collection)
+        return collection unless collection.nil?
+
+        error! 'nothing for this search', :internal_server_error
+      end
+    end
+
     resource :movies do
       desc 'returns all movies'
+      params do
+        use :pagination
+      end
       get do
         Movie.all.page(params[:page]).per(params[:per])
       end
 
-      desc 'Show the year that had more films'
-      get '/year-more-release' do
-        year_movies = Movie.by_release_date.max_by{|k,v| v}
+      desc 'Show the movies by year'
+      params do
+        use :pagination
+        requires :year, type: String, desc: 'year movie release date'
+      end
+      get '/by-year/:year' do
+        movie = Movie.by_year(params[:year]).page(params[:page]).per(params[:per])
 
-        { year: year_movies[0].to_i, movies:year_movies[1] }
+        show_colection(movie)
       end
 
+      desc 'Show the movies by genre'
+      params do
+        use :pagination
+        requires :genre, type: String, desc: 'Movie genre'
+      end
+      get '/by-genre/:genre' do
+        movie = Movie.where("genre ILIKE '%#{params[:genre]}%'").page(params[:page]).per(params[:per])
 
-      desc 'Show the movies by year'
-      get '/by-year/:year' do
-        Movie.by_year(params[:year]).page(params[:page]).per(params[:per])
+        show_colection(movie)
+      end
+
+      desc 'Show the movies by parental rate'
+      params do
+        use :pagination
+        requires :parental_rating, type: String, desc: 'Parental rating'
+      end
+      get '/by-parental_rating/:parental_rating' do
+        movie = Movie.where(parental_rating: params[:parental_rating]).page(params[:page]).per(params[:per])
+
+        show_colection(movie)
+      end
+
+      desc 'Count movie by year'
+      get '/count-by-year' do
+        year_movies = Movie.by_release_date
+        show_colection(year_movies)
+      end
+
+      desc 'Show the year that had more movies'
+      get '/year-more-release' do
+        year_movies = Movie.by_release_date.max_by { |_k, v| v }
+
+        { year: year_movies[0].to_i, movies: year_movies[1] }
       end
 
       desc 'Show highest rating movie by parental rating'
       get '/best-rating-by-parental-rating/:parental_rating' do
-        Movie.where(parental_rating: params[:parental_rating])
-        .where.not(rating: nil)
-        .order(:rating, :created_at).last
+        movie = Movie.where(parental_rating: params[:parental_rating])
+                .where.not(rating: nil)
+                .order(:rating, :created_at).last
+
+        show_colection(movie)
       end
 
       desc 'Show highest rating movie by genre'
       get '/best-rating-by-genre/:genre' do
-        Movie.where("genre ILIKE '%#{params[:genre]}%'")
-        .where.not(rating: nil)
-        .order(:rating, :created_at).last
+        movie = Movie.where("genre ILIKE '%#{params[:genre]}%'")
+                .where.not(rating: nil)
+                .order(:rating, :created_at).last
+
+        show_colection(movie)
       end
 
       desc 'searches a movie using title'
@@ -63,11 +115,7 @@ module Movies
       get '/:id' do
         movie = Movie.find_by_id(params[:id])
 
-        if movie
-          movie
-        else
-          error! 'not found', :internal_server_error
-        end
+        show_colection(movie)
       end
 
       desc 'Create a movie.'
@@ -76,8 +124,8 @@ module Movies
         requires :release_date, type: Date, desc: 'Movie release date'
         optional :runtime, type: String, desc: 'Movie runtime'
         optional :genre, type: String, desc: 'Movie genre'
-        optional :parental_rating, type: String, desc: 'Movie'
-        optional :plot, type: String, desc: 'Movie'
+        optional :parental_rating, type: String, desc: 'Movie parental rating'
+        optional :plot, type: String, desc: 'Movie plot'
       end
 
       post do
