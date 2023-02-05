@@ -4,6 +4,7 @@ module Movies
   class API < Grape::API
     version 'v1', using: :path
     prefix 'api'
+    formatter :json, Grape::Formatter::ActiveModelSerializers
     format :json
 
     helpers do
@@ -67,6 +68,12 @@ module Movies
         show_colection(year_movies)
       end
 
+      desc 'Movie ratings'
+      get '/:id/ratings' do
+        movie = Movie.find(params[:id])
+        { movie: movie.title, total_ratings: movie.ratings.count, ratings: movie.ratings.select(:id, :grade)}
+      end
+
       desc 'Show the year that had more movies'
       get '/year-more-release' do
         year_movies = Movie.by_release_date.max_by { |_k, v| v }
@@ -75,6 +82,11 @@ module Movies
       end
 
       desc 'Show highest rating movie by parental rating'
+      params do
+        use :pagination
+        requires :parental_rating, type: String, desc: 'Movie parental rating'
+      end
+
       get '/best-rating-by-parental-rating/:parental_rating' do
         movie = Movie.where(parental_rating: params[:parental_rating])
                 .where.not(rating: nil)
@@ -84,6 +96,11 @@ module Movies
       end
 
       desc 'Show highest rating movie by genre'
+      params do
+        use :pagination
+        requires :genre, type: String, desc: 'Movie genre'
+      end
+
       get '/best-rating-by-genre/:genre' do
         movie = Movie.where("genre ILIKE '%#{params[:genre]}%'")
                 .where.not(rating: nil)
