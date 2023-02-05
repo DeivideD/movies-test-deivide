@@ -14,6 +14,7 @@ gem 'rails', '~> 6.1.0'
 gem 'redis', '~> 4.0'
 gem 'kaminari'
 gem 'grape-active_model_serializers'
+gem 'rswag'
 
 
 group :development, :test do
@@ -24,6 +25,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 4.0.1'
   gem 'tty-spinner'
   gem 'net-http'
+  gem 'rswag-specs'
 end
 
 group :development do

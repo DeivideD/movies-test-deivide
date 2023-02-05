@@ -1,0 +1,549 @@
+---
+openapi: 3.0.1
+info:
+  title: IA Movies
+  description: "The best movies"
+  version: 1.0
+paths: 
+  /api/v1/movies:
+    get:
+      summary: Returns a list of movies.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        '200':    # status code
+          description: A JSON array of movies
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  id: 
+                    type: integer
+                    example: 4
+                  title: 
+                    type: string
+                    example: vinkings
+                  release_date: 
+                    type: date
+                    example: 2022/01/01
+                  runtime: 
+                    type: string
+                    example: 160 min
+                  genre: 
+                    type: string
+                    example: fantasy
+                  parental_rating: 
+                    type: string
+                    example: G
+                  plot: 
+                    type: string
+                    example: The vinkings
+                  average_rating: 
+                    type: float
+                    example: 4.0
+                  total_ratings:
+                    type: integer
+                    example: 6
+        '404':
+          description: nothing for this search.
+        default:
+          description: Unexpected error
+  /api/v1/movies/by-year/{year}:
+    get:
+      summary: Returns a list of movies filtered by year.
+      description: Optional extended description in CommonMark or HTML.
+      parameters:
+        - name: year
+          in: path
+          required: true
+          escription: Parameter description in CommonMark or HTML.
+      responses:
+        '200':    # status code
+          description: A JSON array of movies
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  id: 
+                    type: integer
+                    example: 4
+                  title: 
+                    type: string
+                    example: vinkings
+                  release_date: 
+                    type: date
+                    example: 2022/01/01
+                  runtime: 
+                    type: string
+                    example: 160 min
+                  genre: 
+                    type: string
+                    example: fantasy
+                  parental_rating: 
+                    type: string
+                    example: G
+                  plot: 
+                    type: string
+                    example: The vinkings
+                  average_rating: 
+                    type: float
+                    example: 4.0
+                  total_ratings:
+                    type: integer
+                    example: 6
+        '404':
+          description: nothing for this search.
+        default:
+          description: Unexpected error
+  /api/v1/movies/by-genre/{genre}:
+    get:
+      summary: Returns a list of movies filtered by genre.
+      description: Optional extended description in CommonMark or HTML.
+      parameters:
+        - name: genre
+          in: path
+          required: true
+          escription: Parameter description in CommonMark or HTML.
+      responses:
+        '200':    # status code
+          description: A JSON array of movies
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  id: 
+                    type: integer
+                    example: 4
+                  title: 
+                    type: string
+                    example: vinkings
+                  release_date: 
+                    type: date
+                    example: 2022/01/01
+                  runtime: 
+                    type: string
+                    example: 160 min
+                  genre: 
+                    type: string
+                    example: fantasy
+                  parental_rating: 
+                    type: string
+                    example: G
+                  plot: 
+                    type: string
+                    example: The vinkings
+                  average_rating: 
+                    type: float
+                    example: 4.0
+                  total_ratings:
+                    type: integer
+                    example: 6
+        '404':
+          description: nothing for this search.
+        default:
+          description: Unexpected error
+  /api/v1/movies/by-parental_rating/{parental-rating}:
+    get:
+      summary: Returns a list of movies filtered by parental rating.
+      description: Optional extended description in CommonMark or HTML.
+      parameters:
+        - name: parental-rating
+          in: path
+          required: true
+          escription: Parameter description in CommonMark or HTML.
+      responses:
+        '200':    # status code
+          description: A JSON array of movies
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  id: 
+                    type: integer
+                    example: 4
+                  title: 
+                    type: string
+                    example: vinkings
+                  release_date: 
+                    type: date
+                    example: 2022/01/01
+                  runtime: 
+                    type: string
+                    example: 160 min
+                  genre: 
+                    type: string
+                    example: fantasy
+                  parental_rating: 
+                    type: string
+                    example: G
+                  plot: 
+                    type: string
+                    example: The vinkings
+                  average_rating: 
+                    type: float
+                    example: 4.0
+                  total_ratings:
+                    type: integer
+                    example: 6
+        '404':
+          description: nothing for this search.
+        default:
+          description: Unexpected error
+  /api/v1/movies/count-by-year:
+    get:
+      summary: Returns a list of years and number of movies released that year.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        '200':    # status code
+          description: A JSON array with movies and quantity by yar
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  "2016.0":
+                    type: 10
+        '404':
+          description: nothing for this search.
+        default:
+          description: Unexpected error
+  /api/v1/movies/count-by-year:
+    get:
+      summary: Returns a list of years and number of movies released that year.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        '200':    # status code
+          description: A JSON array with movies and quantity by yar
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  "2016.0":
+                    type: 10
+        '404':
+          description: nothing for this search.
+        default:
+          description: Unexpected error
+  /api/v1/movies/{id}/ratings:
+    get:
+      summary: Returns a movie by id and its ratings.
+      description: Returns a movie by id and its ratings.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          escription: id - interger.
+      responses:
+        '200':    # status code
+          description: A JSON array with movies and its ratings
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  id: 
+                    type: integer
+                    example: 4
+                  title: 
+                    type: string
+                    example: the last man
+                  total_ratings: 
+                    type: integer
+                    example: 1
+                  ratings:
+                    type: array
+                    example: [{
+                      id: 1, 
+                      grade: 5
+                    }]
+
+        '404':
+          description: nothing for this search.
+        default:
+          description: Unexpected error
+  /api/v1/movies/year-more-release:
+    get:
+      summary: Returns the year that had the most movie releases.
+      description: Returns the year that had the most movie releases.
+      responses:
+        '200':    # status code
+          description: A JSON with the year that had the most movie releases.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  year: 
+                    type: integer
+                    example: 4
+                  movies: 
+                    type: integer
+                    example: 120           
+        '404':
+          description: nothing for this search.
+        default:
+          description: Unexpected error
+  /api/v1/movies/best-rating-by-parental-rating/{parental_rating}:
+    get:
+      summary: Returns the movie with the best rating by parental rating.
+      description: Returns the movie with the best rating by parental rating.
+      parameters:
+        - name: parental_rating
+          in: path
+          required: true
+          escription: parental_rating - string.
+      responses:
+        '200':    # status code
+          description: A JSON with the movie with the best rating by parental rating.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  id: 
+                    type: integer
+                    example: 4
+                  title: 
+                    type: string
+                    example: vinkings
+                  release_date: 
+                    type: date
+                    example: 2022/01/01
+                  runtime: 
+                    type: string
+                    example: 160 min
+                  genre: 
+                    type: string
+                    example: fantasy
+                  parental_rating: 
+                    type: string
+                    example: G
+                  plot: 
+                    type: string
+                    example: The vinkings
+                  average_rating: 
+                    type: float
+                    example: 4.0
+                  total_ratings:
+                    type: integer
+                    example: 6        
+        '404':
+          description: nothing for this search.
+        default:
+          description: Unexpected error
+  /api/v1/movies/best-rating-by-genre/{genre}:
+    get:
+      summary: Returns the movie with the best rating by genre.
+      description: Returns the movie with the best rating by genre.
+      parameters:
+        - name: genre
+          in: path
+          required: true
+          escription: genre - string.
+      responses:
+        '200':    # status code
+          description: A JSON with the movie with the best rating by genre.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  id: 
+                    type: integer
+                    example: 4
+                  title: 
+                    type: string
+                    example: vinkings
+                  release_date: 
+                    type: date
+                    example: 2022/01/01
+                  runtime: 
+                    type: string
+                    example: 160 min
+                  genre: 
+                    type: string
+                    example: fantasy
+                  parental_rating: 
+                    type: string
+                    example: G
+                  plot: 
+                    type: string
+                    example: The vinkings
+                  average_rating: 
+                    type: float
+                    example: 4.0
+                  total_ratings:
+                    type: integer
+                    example: 6        
+        '404':
+          description: nothing for this search.
+        default:
+          description: Unexpected error
+  /api/v1/movies/search?title={title}:
+    get:
+      summary: Returns the movie by title.
+      description: Returns the movie by title.
+      parameters:
+        - name: title
+          in: path
+          required: true
+          escription: title - string.
+      responses:
+        '200':    # status code
+          description: A JSON with the movie by title.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  id: 
+                    type: integer
+                    example: 4
+                  title: 
+                    type: string
+                    example: vinkings
+                  release_date: 
+                    type: date
+                    example: 2022/01/01
+                  runtime: 
+                    type: string
+                    example: 160 min
+                  genre: 
+                    type: string
+                    example: fantasy
+                  parental_rating: 
+                    type: string
+                    example: G
+                  plot: 
+                    type: string
+                    example: The vinkings
+                  average_rating: 
+                    type: float
+                    example: 4.0
+                  total_ratings:
+                    type: integer
+                    example: 6        
+        '404':
+          description: nothing for this search.
+        default:
+          description: Unexpected error
+  /api/v1/movies/:
+    post:
+      summary: Create a movie.
+      description:  Create a movie.
+      parameters:
+        - name: title
+          in: path
+          required: true
+          escription: title - string.
+        - name: release_date
+          in: path
+          required: true
+          escription: release_date - date.
+        - name: runtime
+          in: path
+          escription: runtime - string.
+        - name: genre
+          in: path
+          escription: genre - string.
+        - name: parental_rating
+          in: path
+          escription: parental_rating - string.
+        - name: plot
+          in: path
+          escription: plot - string.
+      responses:
+        '200':    # status code
+          description: A JSON with the movie by title.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  id: 
+                    type: integer
+                    example: 4
+                  title: 
+                    type: string
+                    example: vinkings
+                  release_date: 
+                    type: date
+                    example: 2022/01/01
+                  runtime: 
+                    type: string
+                    example: 160 min
+                  genre: 
+                    type: string
+                    example: fantasy
+                  parental_rating: 
+                    type: string
+                    example: G
+                  plot: 
+                    type: string
+                    example: The vinkings
+                  average_rating: 
+                    type: float
+                    example: 4.0
+                  total_ratings:
+                    type: integer
+                    example: 6        
+        default:
+          description: Unexpected error
+  /api/v1/movies/{id}:
+    delete:
+      summary: Returns the year that had the most movie releases.
+      description: Returns the year that had the most movie releases.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          escription: id - integer.
+      responses:
+        '200':    # status code
+          description: A JSON with the year that had the most movie releases.
+          content:
+            application/json:    
+            schema: 
+        default:
+          description: Unexpected error
+  /api/v1/ratings/average-rate:
+    get:
+      summary: Returns the year that had the most movie releases.
+      description: Returns the year that had the most movie releases.
+      responses:
+        '200':    # status code
+          description: A JSON with the year that had the most movie releases.
+          content:
+            application/json:
+              schema:        
+        '404':
+          description: nothing for this search.
+        default:
+          description: Unexpected error
+  /api/v1/ratings:
+    post:
+      summary: Returns the year that had the most movie releases.
+      description: Returns the year that had the most movie releases.
+      parameters:
+        - name: movie
+          in: path
+          required: true
+          escription: title - string.
+        - name: grade
+          in: path
+          required: true
+          escription: grade.
+      responses:
+        '200':    # status code
+          description: A JSON with the year that had the most movie releases.
+          content:
+            application/json:
+              schema:        
+        '404':
+          description: nothing for this search.
+        default:
+          description: Unexpected error
