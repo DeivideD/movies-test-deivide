@@ -47,7 +47,7 @@ Movie.create(
   rand(1..10).times do
     Rating.create(
       movie: movie,
-      grade: rand(0..5)
+      grade: rand(1..5)
     )
   end
 end

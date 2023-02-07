@@ -26,7 +26,7 @@ module Movies
         use :pagination
       end
       get do
-        Movie.all.page(params[:page]).per(params[:per])
+        Movie.includes(:ratings).page(params[:page]).per(params[:per])
       end
 
       desc 'Show the movies by year'
@@ -64,7 +64,7 @@ module Movies
 
       desc 'Count movie by year'
       get '/count-by-year' do
-        year_movies = Movie.by_release_date
+        year_movies = Movie.group("DATE_PART('year', release_date)").count
         show_colection(year_movies)
       end
 
@@ -76,7 +76,7 @@ module Movies
 
       desc 'Show the year that had more movies'
       get '/year-more-release' do
-        year_movies = Movie.by_release_date.max_by { |_k, v| v }
+        year_movies = Movie.group("DATE_PART('year', release_date)").count.max_by { |_k, v| v }
 
         { year: year_movies[0].to_i, movies: year_movies[1] }
       end
@@ -102,7 +102,7 @@ module Movies
       end
 
       get '/best-rating-by-genre/:genre' do
-        movie = Movie.where("genre ILIKE '%#{params[:genre]}%'")
+        movie = Movie.where("genre ILIKE ?", "%#{params[:genre]}%")
                 .where.not(rating: nil)
                 .order(:rating, :created_at).last
 
@@ -115,7 +115,7 @@ module Movies
       end
 
       get '/search' do
-        movies = Movie.where("title ILIKE '%#{params[:title]}%'")
+        movies = Movie.where("title ILIKE ?", "%#{params[:genre]}%")
 
         if movies.any?
           movies.first

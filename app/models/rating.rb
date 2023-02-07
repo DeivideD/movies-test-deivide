@@ -2,7 +2,7 @@ class Rating < ApplicationRecord
   belongs_to :movie
 
   validates_numericality_of :grade, :greater_than => 0, :less_than => 6
-  validates :movie, presence: true
+  validates :movie, presence: true, if: :movie_id
 
   after_save :calculate_rating
 

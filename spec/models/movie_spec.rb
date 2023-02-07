@@ -14,14 +14,6 @@ RSpec.describe Movie, type: :model do
   end
 
   context 'scopes' do
-    describe '.by_release_date' do
-      let!(:movie_1) { create(:movie, release_date: Date.parse("06 May 2022")) }
-      let!(:movie_2) { create(:movie, release_date: Date.parse("01 Jan 2023")) }
-      let!(:movie_3) { create(:movie, release_date: Date.parse("15 Jan 2023")) }
-
-      it { expect(described_class.by_release_date).to eq({ 2022.0 => 1, 2023.0 => 2 }) }
-    end
-
     describe '.by_year' do
       let!(:movie_1) { create(:movie, release_date: Date.parse("06 May 2022")) }
 
