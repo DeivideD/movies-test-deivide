@@ -4,11 +4,35 @@ info:
   title: IA Movies
   description: "The best movies"
   version: 1.0
+servers:
+- url: http://127.0.0.1:3000/api/v1
+- url: http://localhost:3000/api/v1
+
+tags:
+  - name: movies
+    description: All endpoints to movies
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+  - name: ratings
+    description: All endpoints to ratings
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
 paths: 
-  /api/v1/movies:
+  /movies:
     get:
+      tags:
+        - movies
       summary: Returns a list of movies.
       description: Optional extended description in CommonMark or HTML.
+      parameters:
+        - name: page
+          in: query
+          description: page of request
+        - name: per
+          in: query
+          description: quantity per page
       responses:
         '200':    # status code
           description: A JSON array of movies
@@ -48,15 +72,23 @@ paths:
           description: nothing for this search.
         default:
           description: Unexpected error
-  /api/v1/movies/by-year/{year}:
+  /movies/by-year/{year}:
     get:
+      tags:
+        - movies
       summary: Returns a list of movies filtered by year.
       description: Optional extended description in CommonMark or HTML.
       parameters:
         - name: year
           in: path
           required: true
-          escription: Parameter description in CommonMark or HTML.
+          description: Parameter description in CommonMark or HTML.
+        - name: page
+          in: query
+          description: page of request
+        - name: per
+          in: query
+          description: page of request
       responses:
         '200':    # status code
           description: A JSON array of movies
@@ -96,15 +128,17 @@ paths:
           description: nothing for this search.
         default:
           description: Unexpected error
-  /api/v1/movies/by-genre/{genre}:
+  /movies/by-genre/{genre}:
     get:
+      tags:
+        - movies
       summary: Returns a list of movies filtered by genre.
       description: Optional extended description in CommonMark or HTML.
       parameters:
         - name: genre
           in: path
           required: true
-          escription: Parameter description in CommonMark or HTML.
+          description: Parameter description in CommonMark or HTML.
       responses:
         '200':    # status code
           description: A JSON array of movies
@@ -144,15 +178,27 @@ paths:
           description: nothing for this search.
         default:
           description: Unexpected error
-  /api/v1/movies/by-parental_rating/{parental-rating}:
+  /movies/by-parental_rating/{parental-rating}:
     get:
+      tags:
+        - movies
       summary: Returns a list of movies filtered by parental rating.
       description: Optional extended description in CommonMark or HTML.
       parameters:
         - name: parental-rating
           in: path
-          required: true
+          drequired: true
           escription: Parameter description in CommonMark or HTML.
+          schema:
+            type: string
+            default: available
+            enum:
+              - N/A
+              - G
+              - PG
+              - PG-13
+              - R
+              - NC-17
       responses:
         '200':    # status code
           description: A JSON array of movies
@@ -192,8 +238,10 @@ paths:
           description: nothing for this search.
         default:
           description: Unexpected error
-  /api/v1/movies/count-by-year:
+  /movies/count-by-year:
     get:
+      tags:
+        - movies
       summary: Returns a list of years and number of movies released that year.
       description: Optional extended description in CommonMark or HTML.
       responses:
@@ -210,8 +258,10 @@ paths:
           description: nothing for this search.
         default:
           description: Unexpected error
-  /api/v1/movies/count-by-year:
+  /movies/count-by-year:
     get:
+      tags:
+        - movies
       summary: Returns a list of years and number of movies released that year.
       description: Optional extended description in CommonMark or HTML.
       responses:
@@ -228,8 +278,10 @@ paths:
           description: nothing for this search.
         default:
           description: Unexpected error
-  /api/v1/movies/{id}/ratings:
+  /movies/{id}/ratings:
     get:
+      tags:
+        - movies
       summary: Returns a movie by id and its ratings.
       description: Returns a movie by id and its ratings.
       parameters:
@@ -265,8 +317,10 @@ paths:
           description: nothing for this search.
         default:
           description: Unexpected error
-  /api/v1/movies/year-more-release:
+  /movies/year-more-release:
     get:
+      tags:
+        - movies
       summary: Returns the year that had the most movie releases.
       description: Returns the year that had the most movie releases.
       responses:
@@ -287,15 +341,17 @@ paths:
           description: nothing for this search.
         default:
           description: Unexpected error
-  /api/v1/movies/best-rating-by-parental-rating/{parental_rating}:
+  /movies/best-rating-by-parental-rating/{parental_rating}:
     get:
+      tags:
+        - movies
       summary: Returns the movie with the best rating by parental rating.
       description: Returns the movie with the best rating by parental rating.
       parameters:
         - name: parental_rating
           in: path
           required: true
-          escription: parental_rating - string.
+          description: parental_rating - string.
       responses:
         '200':    # status code
           description: A JSON with the movie with the best rating by parental rating.
@@ -335,8 +391,10 @@ paths:
           description: nothing for this search.
         default:
           description: Unexpected error
-  /api/v1/movies/best-rating-by-genre/{genre}:
+  /movies/best-rating-by-genre/{genre}:
     get:
+      tags:
+        - movies
       summary: Returns the movie with the best rating by genre.
       description: Returns the movie with the best rating by genre.
       parameters:
@@ -383,15 +441,17 @@ paths:
           description: nothing for this search.
         default:
           description: Unexpected error
-  /api/v1/movies/search?title={title}:
+  /movies/search?title={title}:
     get:
+      tags:
+        - movies
       summary: Returns the movie by title.
       description: Returns the movie by title.
       parameters:
         - name: title
           in: path
           required: true
-          escription: title - string.
+          description: title - string.
       responses:
         '200':    # status code
           description: A JSON with the movie by title.
@@ -431,31 +491,86 @@ paths:
           description: nothing for this search.
         default:
           description: Unexpected error
-  /api/v1/movies/:
-    post:
-      summary: Create a movie.
-      description:  Create a movie.
+  /movies/{id}:
+    get:
+      tags:
+        - movies
+      summary: Returns the movie by id.
+      description: Returns the movie by id.
       parameters:
         - name: title
           in: path
           required: true
-          escription: title - string.
-        - name: release_date
-          in: path
-          required: true
-          escription: release_date - date.
-        - name: runtime
-          in: path
-          escription: runtime - string.
-        - name: genre
-          in: path
-          escription: genre - string.
-        - name: parental_rating
-          in: path
-          escription: parental_rating - string.
-        - name: plot
-          in: path
-          escription: plot - string.
+          description: movie's id.
+      responses:
+        '200':   
+          description: A JSON with the movie by id.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  id: 
+                    type: integer
+                    example: 4
+                  title: 
+                    type: string
+                    example: vinkings
+                  release_date: 
+                    type: date
+                    example: 2022/01/01
+                  runtime: 
+                    type: string
+                    example: 160 min
+                  genre: 
+                    type: string
+                    example: fantasy
+                  parental_rating: 
+                    type: string
+                    example: G
+                  plot: 
+                    type: string
+                    example: The vinkings
+                  average_rating: 
+                    type: float
+                    example: 4.0
+                  total_ratings:
+                    type: integer
+                    example: 6        
+        '404':
+          description: nothing for this search.
+        default:
+          description: Unexpected error
+  /movies/:
+    post:
+      tags:
+        - movies
+      summary: Create a movie.
+      description:  Create a movie.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              schema:
+              type: object
+              properties:
+                title: 
+                  type: string
+                release_date:
+                  type: string
+                  format: date
+                runtime:
+                  type: string
+                genre:
+                  type: string
+                parental_rating:
+                  type: string
+                plot:
+                  type: string
+              required:
+                - title
+                - release_date
       responses:
         '200':    # status code
           description: A JSON with the movie by title.
@@ -493,9 +608,11 @@ paths:
                     example: 6        
         default:
           description: Unexpected error
-  /api/v1/movies/{id}:
+  /movies/{id}:
     delete:
-      summary: Returns the year that had the most movie releases.
+      tags:
+        - movies
+      summary: Delete movie by id.
       description: Returns the year that had the most movie releases.
       parameters:
         - name: id
@@ -510,8 +627,10 @@ paths:
             schema: 
         default:
           description: Unexpected error
-  /api/v1/ratings/average-rate:
+  /ratings/average-rate:
     get:
+      tags:
+        - ratings
       summary: Returns the year that had the most movie releases.
       description: Returns the year that had the most movie releases.
       responses:
@@ -524,21 +643,29 @@ paths:
           description: nothing for this search.
         default:
           description: Unexpected error
-  /api/v1/ratings:
+  /ratings:
     post:
-      summary: Returns the year that had the most movie releases.
+      tags:
+        - ratings
+      summary: Create a rating.
       description: Returns the year that had the most movie releases.
-      parameters:
-        - name: movie
-          in: path
-          required: true
-          escription: title - string.
-        - name: grade
-          in: path
-          required: true
-          escription: grade.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              schema:
+              type: object
+              properties:
+                movie_id: 
+                  type: integer
+                grade:
+                  type: integer
+              required:
+                - movie_id
+                - grade
       responses:
-        '200':    # status code
+        '200':
           description: A JSON with the year that had the most movie releases.
           content:
             application/json:
